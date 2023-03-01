@@ -6,8 +6,6 @@ import{
 
 } from "react-native-heroicons/outline";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Categories from './Categories';
-import FeaturedRow from './FeaturedRow';
 
 import { auth, firestore } from '../../firebase';
 import { FlatList } from 'react-native';

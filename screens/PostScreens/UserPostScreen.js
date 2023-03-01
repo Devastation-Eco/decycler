@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView from 'react-native-maps'
@@ -111,6 +111,8 @@ const UserPostScreen = ({route}) => {
 }
 
 export default UserPostScreen
+
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
 const styles = StyleSheet.create({
 mapContainer: {

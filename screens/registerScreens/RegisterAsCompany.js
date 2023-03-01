@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Alert,
+        Dimensions, Image } from "react-native";
 import { UserIcon } from "react-native-heroicons/outline";
 
 import { auth } from "../../firebase";
@@ -65,74 +66,94 @@ const RegisterAsCompany = ({navigation}) => {
     }
         
     return (
-        <KeyboardAvoidingView style={styles.container}>
+
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+        <TouchableOpacity style={{width: "100%", alignItems: "center", position: "absolute"}} onPress={() => {navigation.navigate("Decide")}}>
+          <Image
+            style={styles.backButton}
+            source={require('../../assets/stanga.png')}
+          /> 
+        </TouchableOpacity>
+        
         <UserIcon size={40} color='#086b2e'/> 
-            <Text style={styles.headerText}>Create a new company account</Text>
+        <Text style={styles.headerText}>Create a new company account</Text>
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Company name"
-                    value={name}
-                    onChangeText={text => setName(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Fiscal code"
-                    value={fiscal}
-                    onChangeText={text => setFiscal(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    placeholder="Phone number"
-                    value={phonenumb}
-                    onChangeText={text => setPNum(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Address"
-                    value={address}
-                    onChangeText={text => setAddress(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    secureTextEntry={true}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Confirm password"
-                    value={password2}
-                    onChangeText={text => setPassword2(text)}
-                    secureTextEntry={true}
-                       />
-            </View>
+        <View style={styles.inputContainer}>
+            <TextInput
+                style={styles.input}
+                placeholder="Company name"
+                value={name}
+                onChangeText={text => setName(text)}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Fiscal code"
+                value={fiscal}
+                onChangeText={text => setFiscal(text)}
+            />
+            <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="Phone number"
+                value={phonenumb}
+                onChangeText={text => setPNum(text)}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Address"
+                value={address}
+                onChangeText={text => setAddress(text)}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={text => setEmail(text)}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={password}
+                onChangeText={text => setPassword(text)}
+                secureTextEntry={true}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Confirm password"
+                value={password2}
+                onChangeText={text => setPassword2(text)}
+                secureTextEntry={true}
+            />
+        </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                    <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+        </View>
+    </KeyboardAvoidingView>
     )
 }
 
 export default RegisterAsCompany
+
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
+const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        paddingTop: 35,
+    },
+    backButton:{
+        width: 40,
+        height: 40,
+        backgroundColor: "green",
+        borderRadius: 50,
+        right: SCREEN_WIDTH/2-40,
+        bottom: SCREEN_HEIGHT/2-80,
     },
     headerText: {
         textAlign: "center",

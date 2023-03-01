@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 
 import { KeyboardAvoidingView } from 'react-native';
-import { TextInput } from 'react-native';
+import { TextInput, Dimensions } from 'react-native';
 
 import { auth } from "../../firebase";
 import { firestore } from '../../firebase';
@@ -46,83 +46,72 @@ const LoginAsCompany = ({navigation}) => {
 
     return (
       
-    <KeyboardAvoidingView 
-            style={styles.container}
-            // behavior="padding"
-        >
-          <TouchableOpacity
-        onPress={() => {navigation.navigate("Decide")}}
-        >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+      <TouchableOpacity style={{width: "100%", alignItems: "center", position: "absolute"}} onPress={() => {navigation.navigate("Decide")}}>
+          <Animatable.Image
+            style={styles.backButton}
+            animation="bounceInRight"
+            duration={1600}
+            source={require('../../assets/stanga.png')}
+            /> 
+        </TouchableOpacity>
         
-      <Animatable.Image
-      
-      animation="fadeInLeft"
-      source={require('../../assets/stanga.png')}
-      
-      className="h-[40px] w-[40px]  bg-[#086b2e]"
-      style={{
-        left: -170,
-        top: -70,
-        position: 'absolute',
-        borderRadius: 50,
-      }}
-      /> 
+        <Animatable.Image 
+          className="h-[200px] w-[200px]" 
+          source={require('../../assets/logo.png')}
+          animation="fadeInDown"
+          duration={1600}
+        /> 
 
-</TouchableOpacity>
-            <Animatable.Image 
-      className="top-3 h-[200px] w-[200px]" 
-      source={require('../../assets/logo.png')}
-      animation="slideInDown"
-      />
-            <Animatable.View
-            animation="fadeInUp"
-             style={styles.inputContainer}>
-                <TextInput 
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    secureTextEntry
-                    style={styles.input}
-                />
-            </Animatable.View>
+        <Animatable.View style={styles.inputContainer} animation="bounceInLeft" duration={1600}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            secureTextEntry
+            style={styles.input}
+          />
+        </Animatable.View>
 
-            <Animatable.View
-            animation="fadeInUp" 
-            style={styles.buttonContainer}>
-                <TouchableOpacity 
-                    onPress={handleLogin}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>Login as a company</Text>
-                </TouchableOpacity>
+        <Animatable.View style={styles.buttonContainer} animation="bounceInUp" duration={1600}>
+          <TouchableOpacity onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login as a company</Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity style={{margin: 15}} onPress={() => {navigation.navigate("Register as buyer")}}>
+            <Text style={styles.signUpText}>Create a new account</Text>
+          </TouchableOpacity>        
+        </Animatable.View>
 
-                <TouchableOpacity 
-                    onPress={() => {navigation.navigate("Register as buyer")}}
-                    style={{margin: 15}}
-                >
-                    <Text style={styles.signUpText}>Create a new account</Text>
-                </TouchableOpacity>
-                
-            </Animatable.View>
-
-        </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
   );
 }
 
 export default LoginAsCompany;
+
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
+const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  backButton:{
+    width: 40,
+    height: 40,
+    backgroundColor: "green",
+    borderRadius: 50,
+    right: SCREEN_WIDTH/2-40,
+    bottom: SCREEN_HEIGHT/2-80,
   },
 
   inputContainer: {
