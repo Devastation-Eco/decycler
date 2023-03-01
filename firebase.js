@@ -8,11 +8,11 @@ import "firebase/compat/storage";
  
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAsn-vxUizMQENx0xp9eyf5EmTryAIXHes",
-    authDomain: "decycler-f50a7.firebaseapp.com",
-    projectId: "decycler-f50a7",
-    storageBucket: "decycler-f50a7.appspot.com",
-    messagingSenderId: "8850990134",
+    apiKey: "API_KEY",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
     appId: "1:8850990134:web:d94daf18439bbcdf0a2497"
 };
  
