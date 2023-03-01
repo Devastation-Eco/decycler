@@ -63,7 +63,7 @@ const AddNewPostScreen = ({navigation}) => {
                     longitudeDelta: 0.0421,
                   })
                 }}
-                query={{key: 'AIzaSyCHW0EFt0l5yNopkX062Ds8Y75SvDoHJHc', language: 'en'}}
+                query={{key: 'YOUR_API_KEY_HERE', language: 'en'}}
                 enablePoweredByContainer={false}
                 styles={{container:{paddingLeft: 13, paddingRight: 13, bottom: 2}}}
             />
