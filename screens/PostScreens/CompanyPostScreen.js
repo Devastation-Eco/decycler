@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MapView from 'react-native-maps'
@@ -60,7 +60,7 @@ const CompanyPostScreen = ({route, navigation}) => {
   };
 
   return (
-   <SafeAreaView>
+   <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined}>
     <View style={styles.mapContainer}>
       <MapView 
       style={styles.map}
@@ -104,7 +104,7 @@ const CompanyPostScreen = ({route, navigation}) => {
         </TouchableOpacity>
      </View>
 
-   </SafeAreaView>
+   </KeyboardAvoidingView>
   )
 }
 

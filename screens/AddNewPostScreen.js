@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions} from 'react-native';
 
-import { KeyboardAvoidingView } from 'react-native';
-import { TextInput } from 'react-native';
-
-import { auth } from "../firebase";
-import { firestore } from '../firebase';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MapView from "react-native-maps";
 import {Marker} from "react-native-maps";
 import * as Location from "expo-location";
-import * as Animatable from 'react-native-animatable';
+import { MagnifyingGlassIcon } from 'react-native-heroicons/solid';
 
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const AddNewPostScreen = ({navigation}) => {
-
-    const [userData, setData] = useState(null);
-
-    const [title, setTitle] = useState('');
-    const [desc, setDesc] = useState('');
-    const [weight, setWeight] = useState('');
-    const [material, setMaterial] = useState('');
 
     const [mapRegion, setRegion] = useState({
       latitude: 46.7712,
@@ -37,7 +27,7 @@ const AddNewPostScreen = ({navigation}) => {
         alert("Location permission denied");
         return;
       }
-      
+    
       let location = await Location.getCurrentPositionAsync();
       setRegion({
         latitude: location.coords.latitude,
@@ -48,175 +38,118 @@ const AddNewPostScreen = ({navigation}) => {
     }
 
     useEffect(() => {
+      // Implementeaza asta altfel
       userLocation();
     }, []);
 
-    const handlePost = async () => {
-      await firestore.collection("posts")
-      .add({
-        user: auth.currentUser.uid,
-        title: title,
-        description: desc,
-        material: material,
-        weight: weight,
-        longitude: mapRegion.longitude,
-        latitude: mapRegion.latitude,
-        imgurl: 'https://www.timesnewroman.ro/wp-content/uploads/2020/11/seringi_pe_jos-copy.jpg',
-        uniqueid: firestore.collection("posts").doc(),
-      })
-        .catch(error => {
-           alert(error.message);
-        })
-      navigation.navigate("UserPage");
-    }
-
     return (
-        <KeyboardAvoidingView 
-            style={styles.container}
-           behavior="padding"
-        >
-
-
-          <View style={styles.mapContainer}>
-             
-             <MapView 
-              style={styles.map}
-              region={mapRegion}
-              >
-                <Marker onDrag={(event) => {setCoords(event.nativeEvent.coordinate)}} 
-                onDragEnd={() => {setRegion(tempCoords)}}
-                coordinate={mapRegion} title="Your location" draggable={true}/>
-            </MapView>
-           </View>
-  
-
+        <SafeAreaView style={styles.container}>
+          <View style={styles.topBar}> 
+            <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+              <Image style={styles.backButton}
+                    source={require('../assets/stanga.png')}/> 
+            </TouchableOpacity>
+        
+            <GooglePlacesAutocomplete
+                placeholder='Search your location'
+                fetchDetails={true}
+                currentLocation={true}
+                currentLocationLabel="Your current location"
+                onPress={(data, details = null) => {
+                  setRegion({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  })
+                }}
+                query={{key: 'AIzaSyCHW0EFt0l5yNopkX062Ds8Y75SvDoHJHc', language: 'en'}}
+                enablePoweredByContainer={false}
+                styles={{container:{paddingLeft: 13, paddingRight: 13, bottom: 2}}}
+            />
+            
+            <MagnifyingGlassIcon size={35} color='black'/> 
+          </View>
           
+          <View style={styles.mapContainer}>
+             <MapView style={styles.map} region={mapRegion}>
+                <Marker 
+                  coordinate={mapRegion} title="Your location"/>
+              </MapView>
+          </View>
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("AddInfo", {long: mapRegion.longitude, lat: mapRegion.latitude})}} >
-              <Text style={styles.buttonText}>Okay</Text>
+              <Text style={styles.buttonText}>Set location</Text>
             </TouchableOpacity>
           </View>
-
-        </KeyboardAvoidingView>
+        </SafeAreaView>
   );
 }
 
 export default AddNewPostScreen;
 
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    //justifyContent: 'center',
+    flexDirection: "column",
+    backgroundColor: "green",
   },
 
- topContainer:{
+  topBar:{
+    flexDirection: "row",
+    alignItems: "flex-start",
+    alignContent: "space-around",
+    padding: 15,
+  },
+  backButton:{
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    backgroundColor: "green",
+    borderWidth: 1,
+    borderColor: "black",
+  },
+
+  mapContainer: {
     width: "100%",
-    height: 90,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 10,
- },
-
-mapContainer: {
-  width: "100%",
-  marginTop: 0,
-  alignItems: "center"
-},
-
-map: {
-  width: "100%",
-  height: "100%",
-  borderColor: 'black'
-},
-
- middleContainer: {
-    width: "100%",
-    alignItems: "center",
     marginTop: 0,
- },
+    alignItems: "center"
+  },
 
- buttonContainer: {
+  map: {
+    width: "100%",
+    height: "100%",
+    borderColor: 'black'
+  },
+
+  buttonContainer: {
     position: 'absolute',
     width: "100%",
     alignItems: "center",
-    marginTop:"180%",
- },
+  },
 
- button:{
-  backgroundColor: "#086b2e",
-  width: "50%",
-  height: 70,
-  alignItems: "center",
-  justifyContent: "center",
-  borderRadius: 10,
-  elevation: 10,
-  marginTop: 20,
-},
-
-buttonText:{
-  color: "white",
-  fontWeight: "700",
-  fontSize: 16,
-},
-
- title: {
-    backgroundColor: "white",
-    borderColor: "#086b2e",
-    paddingHorizontal: 15,
-    borderWidth: 2,
+  button:{
+    backgroundColor: "#086b2e",
+    width: "50%",
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 10,
-    width: "70%",
-    marginTop: 10,
-    height: 40,
-},
+    elevation: 20,
+    top: SCREEN_HEIGHT-120,
+  },
 
-desc: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderWidth: 2,
-    borderColor: "#086b2e",
-    borderRadius: 10,
-    width: "90%",
-    height: 100,
-    marginTop: 10,
-},
-
-rowContainer:{
-    width: "80%",
-    flexDirection: "row",
-    justifyContent: "space-evenly"
-},
-
-wmInput: {
-  borderColor: "#086b2e",
-  backgroundColor: "white",
-  paddingHorizontal: 15,
-  paddingVertical: 10,
-  borderWidth: 2,
-  borderRadius: 10,
-  width: "40%",
-  height: 40,
-  marginTop: 10,
-},
-
- t1: {
+  buttonText:{
     color: "white",
-    marginTop: 25,
-    fontSize: 30,
-    fontWeight: "600",
-    textShadowColor: 'black', 
-    textShadowOffset: { width: -1, height: 0 },
-    textShadowRadius: 30,
- },
-
- t2: {
-    color: "black",
-    marginBottom: 5,
-    fontSize: 15,
-    fontWeight: "900",
- }
+    fontWeight: "700",
+    fontSize: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 5,
+  },
 
 });
