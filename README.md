@@ -31,3 +31,15 @@ Once you have Decycler running, you can:
 - Post your rubble with information such as its type, location and estimated amount of rubble
 - Browse available rubbles and see their details
 - Contact the person posting their rubble to agree on a price pickup date
+
+<div>
+<img src="assets/choose.png" width=256/>
+<img src="assets/login.png" width=256/>
+<img src="assets/add%20post.png" width=256/>
+</div>
+
+<div>
+<img src="assets/post%20screen.png" width=256/>
+<img src="assets/map.png" width=256/>
+<img src="assets/profile.png" width=256/>
+</div>
